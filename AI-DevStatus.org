@@ -1,0 +1,109 @@
+#+title: Development Status & Continuation Handoff
+#+TAGS: me ai aiAndMe
+
+####+BEGIN: b:ai:file/particulars
+* AI Working Context
+  Working Directory: /bisos/git/auth/bxRepos/bisos-pip/py-dblock
+  File: /bisos/git/auth/bxRepos/bisos-pip/py-dblock/AI-DevStatus.org
+  Activity: bisos-pip
+  Companion Docs: AI-AGENTS.org, AI-WORKFLOW.org, AI-Activity.org, AI-DevStatus.org, README.org
+
+####+END:
+
+This file is a working-state handoff so development can continue on another
+machine (which has this repo but NOT the developer's =~=). It captures the
+architecture, what works, what is untested and the design decisions made so far.
+
+This file is maintained by Claude. Updates are typically triggered by the
+=/bx-update-status= slash command, after major interactions, or before a release.
+
+* Current State
+
+As of 2026-07-12, this repo was carved out of the =bisos-pip/startAiActivity=
+repo to become a standalone =bisos.py-dblock= package containing *only* the
+pure-Python org-mode dblock expansion engine. All =startAiActivity=-specific
+code, docs and artifacts have been removed.
+
+Changes made in this carve-out:
+
+- Import subpackage renamed =bisos/startAiActivity/= → =bisos/pyDblock/=.
+- =py-dblock.cs= imports updated to =from bisos.pyDblock import ...=; the
+  =dblock_particulars.py= import updated likewise.
+- Deleted: =py3/bin/startAiActivity.cs=, =startAiActivity.org=, the stale
+  =bisos.startAiActivity.egg-info/=, =py3/dist/=, and =py3/.mypy_cache/=.
+- =py3/setup.py= scripts list reduced to just =bin/py-dblock.cs=; package name
+  now auto-derives as =bisos.py-dblock= from the repo dir.
+- =README.org= and =_description.org= retitled/rewritten for =bisos.py-dblock=.
+  =README.rst= is generated from =README.org= by =pypiProc.sh= at build time.
+- Panels dir renamed =py3/panels/bisos.startAiActivity/= →
+  =py3/panels/bisos.py-dblock/= and the panel rewritten for py-dblock.
+- Example/test fixture added at =py3/tests/AI-WorkPlan.org= (a copy of the
+  =mother/AI-WorkPlan.org= template, which carries a =b:ai:file/particulars=
+  dblock). The =examples= cmnd now demonstrates =updateDblocks= on it.
+
+* Architecture
+
+#+begin_example
+py3/
+  bin/
+    py-dblock.cs            — csxu; updateDblocks command (processes org files)
+  bisos/
+    pyDblock/
+      updateDblock.py       — general dblock dispatch engine (registerHandler / expandAll)
+      dblock_particulars.py — self-registering handler for b:ai:file/particulars
+  tests/
+    AI-WorkPlan.org         — example/test input (has a b:ai:file/particulars dblock)
+panels/
+  bisos.py-dblock/
+    _nodeBase_/
+      fullUsagePanel-en.org — primary Blee panel
+README.org                  — human-oriented repo README (org-mode source)
+py3/README.rst              — PyPI README [gen: from README.org by pypiProc.sh]
+#+end_example
+
+Key external dependencies (not bundled):
+
+- =bisos.b= — PyCS-Core; provides =cs=, =b_io=, =b.op= APIs
+- =bisos=, =bisos.common= — per =setup.py= install_requires
+
+Entry point (=setup.py= scripts):
+
+- =py-dblock.cs= → =py3/bin/py-dblock.cs=
+
+* What Works
+
+- =py-dblock.cs -i updateDblocks <file...>= — expands =b:ai:file/particulars=
+  dblocks in listed org files (pure Python, no Emacs needed). Non-file args are
+  skipped with a note; unregistered signatures are left untouched.
+- =updateDblock.expandAll(filePath)= — single-pass regex dispatch over a file.
+- =dblock_particulars= self-registers the =b:ai:file/particulars= handler at
+  import time.
+
+(Not yet re-verified after the carve-out — the package still needs a local
+editable reinstall, which the developer will run.)
+
+* What Is Untested
+
+- Local editable reinstall pointing at this repo (the currently-installed
+  =py-dblock.cs= symlink still points at the old =startAiActivity= repo dir).
+- PyPI upload and =pipx install bisos.py-dblock= end-to-end test.
+- =py-dblock.cs= on a file with multiple dblocks of different signatures (only
+  =b:ai:file/particulars= is registered).
+
+* Key Design Decisions
+
+- *Import subpackage is =bisos.pyDblock=* — the distribution name auto-derives
+  as =bisos.py-dblock= from the repo dir, but a dash is not a valid Python
+  identifier, so the importable subpackage is CamelCase =pyDblock=.
+
+- *Engine / handler split* — =updateDblock.py= is signature-agnostic dispatch;
+  each dblock signature lives in its own self-registering handler module
+  (=dblock_particulars.py=). New signatures are added by new handler modules,
+  imported for their registration side effect.
+
+- *=README.org= is the authoritative source* — =py3/README.rst= is generated
+  from it by =pypiProc.sh=; never hand-edit the RST.
+
+# Local Variables:
+# eval: (setq-local toc-org-max-depth 4)
+# End:

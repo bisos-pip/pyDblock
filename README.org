@@ -1,0 +1,215 @@
+#+title: bisos.py-dblock: Pure-Python org-mode Dynamic Block Expansion
+#+DATE: <2026-07-12 Sat>
+#+AUTHOR: Mohsen BANAN
+#+OPTIONS: toc:4
+
+#+BEGIN: b:org:pypi:readme/topControls :pkgName "py-dblock" :comment "basic"
+
+|----------------------+--------------------------------------------------------------------------------|
+| ~Blee Panel Controls~: | [[elisp:(show-all)][Show-All]] : [[elisp:(org-shifttab)][Overview]] : [[elisp:(progn (org-shifttab) (org-content))][Content]] : [[elisp:(delete-other-windows)][(1)]] : [[elisp:(progn (save-buffer) (kill-buffer))][S&Q]] : [[elisp:(save-buffer)][Save]]  : [[elisp:(kill-buffer)][Quit]]  : [[elisp:(bury-buffer)][Bury]] |
+| ~Panel Links~:         | [[file:./py3/panels/bisos.py-dblock/_nodeBase_/fullUsagePanel-en.org][Repo Blee Panel]]                                                              |
+| ~See Also~:            | [[https://pypi.org/project/bisos.py-dblock][At PYPI]] : [[https://github.com/bisos-pip/pycs][bisos.PyCS]]                                                         |
+|----------------------+--------------------------------------------------------------------------------|
+
+#+END:
+
+* Overview
+
+/bisos.py-dblock/ is a pure-Python engine for expanding org-mode *dynamic
+blocks* (dblocks) in files, without requiring Emacs or the Blee =bx-dblock=
+tool. It mimics org-mode's dblock model: handlers register under a signature
+string, and a single pass over a file dispatches each
+=####+BEGIN: <signature> [args]= / =####+END:= block to its registered handler,
+replacing the block body with freshly computed content.
+
+bisos.py-dblock is a python package that uses the
+[[https://github.com/bisos-pip/pycs][PyCS-Framework]]. It provides the
+=py-dblock.cs= command for updating org-mode dynamic blocks from the
+command-line.
+
+The package ships one built-in handler, for the =b:ai:file/particulars= dblock
+used by the ByStar AI collaborative development template set.
+
+* Table of Contents     :TOC:
+- [[#overview][Overview]]
+- [[#part-of-bisos----bystar-internet-services-operating-system][Part of BISOS — ByStar Internet Services Operating System]]
+- [[#bisospy-dblock-is-a-command-only-pycs-facility][bisos.py-dblock is a Command-Only PyCS Facility]]
+- [[#installation][Installation]]
+  - [[#installation-with-pip][Installation With pip]]
+  - [[#installation-with-pipx][Installation With pipx]]
+  - [[#post-installation-basic-testing][Post-Installation Basic Testing]]
+- [[#usage][Usage]]
+  - [[#update-dblocks-in-org-files][Update Dblocks in Org Files]]
+- [[#how-it-works][How It Works]]
+- [[#key-files][Key Files]]
+- [[#documentation-and-blee-panels][Documentation and Blee-Panels]]
+- [[#support][Support]]
+- [[#planned-improvements][Planned Improvements]]
+
+* Part of BISOS — ByStar Internet Services Operating System
+
+Layered on top of Debian, *BISOS* (By* Internet Services Operating System)
+is a unified and universal framework for developing both internet services and
+software-service continuums that use internet services. See
+[[https://github.com/bxGenesis/start][Bootstrapping ByStar, BISOS and Blee]]
+for information about getting started with BISOS.
+
+*BISOS* is a foundation for *The Libre-Halaal ByStar Digital Ecosystem* which
+is described as a cure for losses of autonomy and privacy in a book titled:
+[[https://github.com/bxplpc/120033][Nature of Polyexistentials]]
+
+/bisos.py-dblock/ is part of BISOS. It is a standalone package that can be
+used independently of the full BISOS environment.
+
+* bisos.py-dblock is a Command-Only PyCS Facility
+
+bisos.py-dblock is a command-line tool. It is a PyCS single-unit command
+service. PyCS is a framework that converges development of CLI tools and
+services. PyCS is an alternative to FastAPI, Typer and Click.
+
+bisos.py-dblock uses the PyCS-Framework to expand org-mode =####+BEGIN: ...=
+/ =####+END:= dynamic blocks in one or more files, in pure Python, without
+requiring Emacs or =bx-dblock=.
+
+The core of PyCS-Framework is the /bisos.b/ package (the PyCS-Foundation).
+See [[https://github.com/bisos-pip/b][bisos.b]] for an overview.
+
+* Installation
+
+The sources for the bisos.py-dblock pip package are maintained at:
+https://github.com/bisos-pip/py-dblock.
+
+The bisos.py-dblock pip package is available at PYPI as
+https://pypi.org/project/bisos.py-dblock
+
+You can install bisos.py-dblock with pip or pipx.
+
+** Installation With pip
+
+If you need access to bisos.py-dblock as a python module, you can install it
+with pip:
+
+#+begin_src bash
+pip install bisos.py-dblock
+#+end_src
+
+** Installation With pipx
+
+If you only need access to bisos.py-dblock on command-line, you can install
+it with pipx:
+
+#+begin_src bash
+pipx install bisos.py-dblock
+#+end_src
+
+The following command is made available:
+
+- =py-dblock.cs= — updates org-mode dynamic blocks in files (pure Python)
+
+** Post-Installation Basic Testing
+
+After installation, run:
+
+#+begin_src bash
+py-dblock.cs
+py-dblock.cs -i examples
+#+end_src
+
+* Usage
+
+** Update Dblocks in Org Files
+
+Expand all registered dblocks in one or more files:
+
+#+begin_src bash
+py-dblock.cs -i updateDblocks AI-WorkPlan.org AI-DevStatus.org
+#+end_src
+
+Each file argument is scanned for =####+BEGIN: <signature>= / =####+END:=
+blocks. Blocks whose signature has a registered handler are re-expanded;
+unrecognised blocks are left untouched. Non-file arguments are skipped with a
+note.
+
+A ready-to-use example/test file is bundled at =py3/tests/AI-WorkPlan.org=
+(a copy of the ByStar =mother/AI-WorkPlan.org= template). It contains a
+=b:ai:file/particulars= dblock, so:
+
+#+begin_src bash
+py-dblock.cs -i updateDblocks ./tests/AI-WorkPlan.org
+#+end_src
+
+expands that block in place. =py-dblock.cs -i examples= lists this and other
+example invocations.
+
+* How It Works
+
+=py-dblock= mimics org-mode's dblock model in pure Python:
+
+1. Handlers register under a signature string via
+   =registerHandler(signature, fn)=.
+2. =expandAll(filePath)= does a single-pass regex substitution over the file.
+3. For each =####+BEGIN: <signature> [args]= / =####+END:= block, the signature
+   and its =:key value= arguments are parsed from the BEGIN line, the registered
+   handler is looked up, and its returned text replaces the block body.
+4. Unregistered signatures are left untouched.
+
+The bundled =b:ai:file/particulars= handler derives its content from the file
+path, the containing directory, and the =AI-Activity.org= symlink present there
+(activity name + companion-docs list).
+
+* Key Files
+
+An overview of the relevant files of the bisos.py-dblock package:
+
+*** =py3/bin/py-dblock.cs=
+
+The CS-MU (Command-Services Multi-Unit). Provides the =updateDblocks= command.
+Imports =dblock_particulars= to register the =b:ai:file/particulars= handler.
+
+*** =py3/bisos/pyDblock/updateDblock.py=
+
+General dblock dispatch engine. Handlers register under a signature string
+via =registerHandler(sig, fn)=. =expandAll(filePath)= does a single-pass
+regex substitution over the file, dispatching each =####+BEGIN: <signature>=
+block to its registered handler.
+
+*** =py3/bisos/pyDblock/dblock_particulars.py=
+
+Self-registering handler for the =b:ai:file/particulars= dblock signature.
+Derives the =activity= from the =AI-Activity.org= symlink and builds the
+companion-docs list by scanning the directory.
+
+*** PyPi and Github Packaging
+
+All bisos-pip repos in the https://github.com/bisos-pip github organization
+follow the same structure. They all have [[file:./py3/setup.py][setup.py]] files driven by
+[[file:./py3/pypiProc.sh][pypiProc.sh]].
+
+* Documentation and Blee-Panels
+
+bisos.py-dblock is part of ByStar Digital Ecosystem [[http://www.by-star.net]].
+
+This module's primary documentation is in the form of Blee-Panels.
+
+bisos.py-dblock Blee-Panels are in the =./py3/panels= directory. From within
+Blee and BISOS these panels are accessible under the Blee "Panels" menu.
+
+See [[file:./py3/panels/bisos.py-dblock/_nodeBase_/fullUsagePanel-en.org]]
+for a starting point.
+
+* Support
+
+For support, criticism, comments and questions; please contact the
+author/maintainer\\
+[[http://mohsen.1.banan.byname.net][Mohsen Banan]] at:
+[[http://mohsen.1.banan.byname.net/contact]]
+
+* Planned Improvements
+
+- Upload to PyPI and test as pipx install
+- Write fullUsagePanel-en.org Blee-Panel
+- Add further dblock handlers beyond =b:ai:file/particulars=
+
+# Local Variables:
+# eval: (setq-local toc-org-max-depth 4)
+# End:
