@@ -1,15 +1,15 @@
-#+title: bisos.py-dblock: Pure-Python org-mode Dynamic Block Expansion
+#+title: bisos.pyDblock: Pure-Python org-mode Dynamic Block Expansion
 #+DATE: <2026-07-12 Sat>
 #+AUTHOR: Mohsen BANAN
 #+OPTIONS: toc:4
 
-#+BEGIN: b:org:pypi:readme/topControls :pkgName "py-dblock" :comment "basic"
+#+BEGIN: b:org:pypi:readme/topControls :pkgName "pyDblock" :comment "basic"
 
-|----------------------+--------------------------------------------------------------------------------|
+|----------------------+------------------------------------------------------------------|
 | ~Blee Panel Controls~: | [[elisp:(show-all)][Show-All]] : [[elisp:(org-shifttab)][Overview]] : [[elisp:(progn (org-shifttab) (org-content))][Content]] : [[elisp:(delete-other-windows)][(1)]] : [[elisp:(progn (save-buffer) (kill-buffer))][S&Q]] : [[elisp:(save-buffer)][Save]]  : [[elisp:(kill-buffer)][Quit]]  : [[elisp:(bury-buffer)][Bury]] |
-| ~Panel Links~:         | [[file:./py3/panels/bisos.py-dblock/_nodeBase_/fullUsagePanel-en.org][Repo Blee Panel]]                                                              |
-| ~See Also~:            | [[https://pypi.org/project/bisos.py-dblock][At PYPI]] : [[https://github.com/bisos-pip/pycs][bisos.PyCS]]                                                         |
-|----------------------+--------------------------------------------------------------------------------|
+| ~Panel Links~:         | [[file:./py3/panels/bisos.pyDblock/_nodeBase_/fullUsagePanel-en.org][Repo Blee Panel]] --  [[file:/bisos/git/bxRepos/bisos-pip/pyDblock/py3/panels/bisos.pyDblock/_nodeBase_/fullUsagePanel-en.org][Blee Panel]]                                                |
+| ~See Also~:            | [[https://pypi.org/project/bisos.pyDblock][At PYPI]] : [[https://github.com/bisos-pip/pycs][bisos.PyCS]]                                             |
+|----------------------+------------------------------------------------------------------|
 
 #+END:
 
@@ -32,7 +32,7 @@ used by the ByStar AI collaborative development template set.
 
 * Table of Contents     :TOC:
 - [[#overview][Overview]]
-- [[#part-of-bisos----bystar-internet-services-operating-system][Part of BISOS — ByStar Internet Services Operating System]]
+- [[#part-of-bisos--bystar-internet-services-operating-system][Part of BISOS — ByStar Internet Services Operating System]]
 - [[#bisospy-dblock-is-a-command-only-pycs-facility][bisos.py-dblock is a Command-Only PyCS Facility]]
 - [[#installation][Installation]]
   - [[#installation-with-pip][Installation With pip]]
@@ -42,6 +42,10 @@ used by the ByStar AI collaborative development template set.
   - [[#update-dblocks-in-org-files][Update Dblocks in Org Files]]
 - [[#how-it-works][How It Works]]
 - [[#key-files][Key Files]]
+    - [[#py3binpy-dblockcs][=py3/bin/py-dblock.cs=]]
+    - [[#py3bisospydblockupdatedblockpy][=py3/bisos/pyDblock/updateDblock.py=]]
+    - [[#py3bisospydblockdblock_particularspy][=py3/bisos/pyDblock/dblock_particulars.py=]]
+    - [[#pypi-and-github-packaging][PyPi and Github Packaging]]
 - [[#documentation-and-blee-panels][Documentation and Blee-Panels]]
 - [[#support][Support]]
 - [[#planned-improvements][Planned Improvements]]

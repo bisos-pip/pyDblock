@@ -85,6 +85,7 @@ import typing
 
 from bisos.pyDblock import updateDblock
 import bisos.pyDblock.dblock_particulars  # registers b:ai:file/particulars handler
+import bisos.pyDblock.dblock_runResult    # registers bx:dblock:global:run-result-stdout handler
 
 ####+BEGIN: b:py3:cs:framework/csuListProc :pyImports t :csuImports t :csuParams t :csxuParams nil
 """ #+begin_org

@@ -1,22 +1,28 @@
 #+title: Work Plan
-#+DATE: <2026-07-12 Sat>
+#+DATE: <2026-06-10 Wed 13:54>
 #+AUTHOR: Mohsen BANAN
 #+OPTIONS: toc:4
 #+TAGS: me ai aiAndMe
 
+# Provenance (installed once by startAiActivity.cs --- not regenerated):
+#   Date:      2026-07-19T18:13:31-07:00
+#   User:      bystar
+#   Templates: /bisos/apps/defaults/ai-templates
+#   Command:   /bisos/venv/py3/devbin/startAiActivity.cs -i initiate --root=repo --activity=bisos-pip
+
 ####+BEGIN: b:ai:file/particulars
 * AI Working Context
-  Working Directory: /bisos/git/auth/bxRepos/bisos-pip/py-dblock
-  File: /bisos/git/auth/bxRepos/bisos-pip/py-dblock/AI-WorkPlan.org
+  Working Directory: /bisos/git/auth/bxRepos/bisos-pip/pyDblock
+  File: /bisos/git/auth/bxRepos/bisos-pip/pyDblock/AI-WorkPlan.org
   Activity: bisos-pip
-  Companion Docs: AI-AGENTS.org, AI-WORKFLOW.org, AI-Activity.org, AI-DevStatus.org, README.org
-####+END:
+  Companion Docs: AI-WORKFLOW.org, AI-Activity.org, AI-DevStatus.org, README.org
+###+END:
 
 This Work Plan file drives the AI collaborative development.
 Interactions are broken down into "Stages". Each Stage has a set
 of TODOs that I work with Claude to accomplish.
 
-Note to a fresh Claude: read this file together with AI-AGENTS.org, AI-WORKFLOW.org,
+Note to a fresh Claude: read this file together with AI-WORKFLOW.org,
 AI-Activity.org and AI-DevStatus.org to orient yourself. The =<<Context Confirmation>>=
 TODO below is the standard first step, or use =/bx-confirm0= as the automated equivalent.
 TODOs tagged =:ai:= are assigned to Claude. After completing a TODO, summarize results
@@ -51,18 +57,25 @@ Goal: Reinstall editable, verify the dblock engine, then upload to PyPI.
 
 * Stage 2 TODOs
 ** +
-** TODO [#A] Reinstall editable and re-point the py-dblock.cs symlink at this repo
-SCHEDULED: <2026-07-12 Sat>
+** DONE [#A] Reinstall editable and re-point the py-dblock.cs symlink at this repo
+CLOSED: [2026-07-19 Sun 19:01] SCHEDULED: <2026-07-12 Sat>
 The installed =py-dblock.cs= still points at the old =startAiActivity= repo dir.
 Run (from =py3/=):
 : pypiProc.sh -v -n showRun -i pkgReInstall edit /bisos/venv/py3/dev-bisos3
 ----- AI Results: ------
 
-** TODO [#A] Verify updateDblocks on the example fixture :ai:
-SCHEDULED: <2026-07-12 Sat>
-Run =py-dblock.cs -i examples= and =py-dblock.cs -i updateDblocks ./tests/AI-WorkPlan.org=,
+** DONE [#A] Verify updateDblocks on the example fixture :ai:
+CLOSED: [2026-07-19 Sun 19:01] SCHEDULED: <2026-07-12 Sat>
+Run =py-dblock.cs -i examples= and =py-dblock.cs -i updateDblocks ./tests/dblock_AI-WorkPlan.org=,
 and confirm the =b:ai:file/particulars= block is expanded correctly.
+Confirm that ./py3/tests/verify.sh has a test for that.
 ----- AI Results: ------
+
+** DONE [#A] Verify python bx:dblock:global:run-result-stdout :ai:
+CLOSED: [2026-07-19 Sun 19:01] SCHEDULED: <2026-07-12 Sat>
+Confirm that ./py3/tests/verify.sh has a test for that.
+----- AI Results: ------
+
 
 ** TODO [#A] After upload to pypi, test it as a pipx install
 SCHEDULED: <2026-07-12 Sat>

@@ -1,0 +1,29 @@
+127.0.0.1	localhost
+127.0.1.1       HSS-9999.intra HSS-9999
+
+# The following lines are desirable for IPv6 capable hosts
+::1     localhost ip6-localhost ip6-loopback
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+
+
+####+BEGIN: bx:dblock:global:run-result-stdout :command "echo \\# $(date)"
+\# Sun Jul 19 18:59:33 PDT 2026
+###+END:
+
+
+####+BEGIN: bx:dblock:global:run-result-stdout :command "bannaInfo.cs -i bannaForEtcHosts"
+127.0.22.100  airflow.here
+127.0.22.101  csLineInvoker.here
+127.0.22.102  csLineInvoker_dev.here
+127.0.22.103  csPlayerPerf.here
+127.0.22.104  csPlayerPerf_dev.here
+127.0.22.105  csPlayerUi.here
+127.0.22.106  csPlayerUi_dev.here
+127.0.22.107  sonCliLineInvoker.here
+127.0.22.108  sonCliLineInvoker_dev.here
+127.0.22.109  sonCliPlayerUi.here
+127.0.22.110  sonCliPlayerUi_dev.here
+127.0.22.111  starterSidebar.here
+127.0.22.112  starterSidebar_dev.here
+###+END:

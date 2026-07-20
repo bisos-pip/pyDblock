@@ -1,1 +1,1 @@
-/bisos/apps/defaults/ai-templates/bystar/AI-WORKFLOW.org
+/bisos/apps/defaults/ai-templates/mother/AI-WORKFLOW.org
