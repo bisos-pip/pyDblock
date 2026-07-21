@@ -7,6 +7,12 @@
 Runs the shell command given in the =:command= argument and replaces the
 dblock body with the command's stdout, followed by a trailing newline.
 If the command fails the block body is replaced with an error comment.
+
+Elisp counterpart: =org-dblock-write:bx:dblock:global:run-result-stdout=
+in =/bisos/blee/env3/dblocks/dblock-global-run-results.el=.
+The elisp version uses =(shell-command-to-string ...)= and suppresses stderr
+via =2> /dev/null=. This Python handler uses =subprocess.run= and captures
+stdout only, keeping stderr out of the dblock body.
 #+end_org """
 
 import pathlib
@@ -37,6 +43,9 @@ def _handler(
         )
         output = result.stdout
         if not output.endswith('\n'):
+            output += '\n'
+        # elisp shell-command-to-string appends a trailing blank line
+        if not output.endswith('\n\n'):
             output += '\n'
         return output
     except Exception as exc:

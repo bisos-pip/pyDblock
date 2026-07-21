@@ -7,6 +7,13 @@
 Registers itself with =updateDblock= under the signature =b:ai:file/particulars=.
 This dblock takes no parameters; the handler derives all content from the file
 path, the target directory, and the =AI-Activity.org= symlink present there.
+
+Elisp counterpart: =org-dblock-write:b:ai:file/particulars=
+in =/bisos/blee/env3/dblocks/dblock-comeega-prog.el=.
+The elisp version uses =f-canonical=, =f-dirname=, and =file-symlink-p= to
+derive the same fields (Working Directory, File, Activity, Companion Docs).
+This Python handler replicates that logic using =pathlib= so the dblock can
+be expanded outside Emacs by =py-dblock.cs=.
 #+end_org """
 
 import pathlib
@@ -30,6 +37,7 @@ def _handler(
         targetDir: pathlib.Path,
         args: typing.Dict[str, str],
 ) -> str:
+    targetDir = targetDir.resolve()
     activityLink = targetDir / 'AI-Activity.org'
     if activityLink.is_symlink():
         activity = activityLink.resolve().parent.name

@@ -27,12 +27,30 @@ Fill in the sections below when asked to update, following the structure provide
 
 * Current State
 
+  Stage 1 (carve-out from startAiActivity) is fully DONE. Stage 2 is nearly
+  complete. Only one TODO remains: PyPI upload and =pipx install= end-to-end test.
+
+  Completed since last update (2026-07-20):
+
+  - Docstring cross-references added to both handlers pointing to their elisp
+    counterparts in =/bisos/blee/env3/dblocks/=.
+  - =py3/tests/= now has =.blank= / =.eldb= / =.pydb= fixtures for two dblock types
+    and a =verify.sh= that diffs pyDblock output against the Blee-expanded reference.
+  - Three bugs fixed in the engine (see Key Design Decisions for details):
+    1. =####+END:= was losing one =#= — regex now requires exactly 4 hashes.
+    2. Working directory resolved as relative =.= — fixed with =targetDir.resolve()=.
+    3. =\\= in =:command= args passed to shell unprocessed — =_parseArgs= now
+       decodes org-mode backslash escapes after quote-stripping.
+    4. Trailing blank line added to =run-result-stdout= output to match elisp behaviour.
+
+  =verify.sh= diffs now show only expected differences (timestamp and filename).
+
 As of 2026-07-12, this repo was carved out of the =bisos-pip/startAiActivity=
 repo to become a standalone =bisos.py-dblock= package containing *only* the
 pure-Python org-mode dblock expansion engine. All =startAiActivity=-specific
 code, docs and artifacts have been removed.
 
-Changes made in this carve-out:
+Changes made in that carve-out:
 
 - Import subpackage renamed =bisos/startAiActivity/= → =bisos/pyDblock/=.
 - =py-dblock.cs= imports updated to =from bisos.pyDblock import ...=; the
@@ -59,6 +77,7 @@ py3/
     pyDblock/
       updateDblock.py       — general dblock dispatch engine (registerHandler / expandAll)
       dblock_particulars.py — self-registering handler for b:ai:file/particulars
+      dblock_runResult.py   — self-registering handler for bx:dblock:global:run-result-stdout
   tests/
     AI-WorkPlan.org         — example/test input (has a b:ai:file/particulars dblock)
 panels/
@@ -80,23 +99,22 @@ Entry point (=setup.py= scripts):
 
 * What Works
 
-- =py-dblock.cs -i updateDblocks <file...>= — expands =b:ai:file/particulars=
-  dblocks in listed org files (pure Python, no Emacs needed). Non-file args are
-  skipped with a note; unregistered signatures are left untouched.
+- =py-dblock.cs -i updateDblocks <file...>= — expands all registered dblocks in
+  listed org files (pure Python, no Emacs needed). Non-file args are skipped;
+  unregistered signatures are left untouched.
 - =updateDblock.expandAll(filePath)= — single-pass regex dispatch over a file.
-- =dblock_particulars= self-registers the =b:ai:file/particulars= handler at
-  import time.
-
-(Not yet re-verified after the carve-out — the package still needs a local
-editable reinstall, which the developer will run.)
+- =dblock_particulars= — handles =b:ai:file/particulars=; produces correct absolute
+  Working Directory and File fields. Each handler module has a docstring cross-
+  referencing its elisp counterpart in =/bisos/blee/env3/dblocks/=.
+- =dblock_runResult= — handles =bx:dblock:global:run-result-stdout=; runs =:command=
+  via =subprocess.run(shell=True)=, decodes org-mode backslash escapes, appends
+  trailing blank line to match elisp output format.
+- =py3/tests/verify.sh= — copies =.blank= → =.pydb=, runs =py-dblock.cs=, diffs
+  against =.eldb= reference. Remaining diffs are timestamp and filename only.
 
 * What Is Untested
 
-- Local editable reinstall pointing at this repo (the currently-installed
-  =py-dblock.cs= symlink still points at the old =startAiActivity= repo dir).
 - PyPI upload and =pipx install bisos.py-dblock= end-to-end test.
-- =py-dblock.cs= on a file with multiple dblocks of different signatures (only
-  =b:ai:file/particulars= is registered).
 
 * Key Design Decisions
 
@@ -106,8 +124,20 @@ editable reinstall, which the developer will run.)
 
 - *Engine / handler split* — =updateDblock.py= is signature-agnostic dispatch;
   each dblock signature lives in its own self-registering handler module
-  (=dblock_particulars.py=). New signatures are added by new handler modules,
-  imported for their registration side effect.
+  (=dblock_particulars.py=, =dblock_runResult.py=). New signatures are added by
+  new handler modules, imported in =py-dblock.cs= for their registration side effect.
+
+- *Exactly 4-hash markers* — the regex uses =#{4}\+= (not =###\#+=) to require
+  exactly 4 hashes. Files contain 3-hash markers inside dblock bodies (org-mode
+  internal content); matching 3+ would corrupt those.
+
+- *Backslash unescaping in =_parseArgs=* — org-mode stores =\\= in =:command= args
+  as a literal double-backslash in the file. =_parseArgs= decodes =\\\\= → =\\= after
+  quote-stripping so the shell receives the intended single-backslash sequence.
+
+- *Trailing blank line in run-result-stdout* — elisp =shell-command-to-string=
+  appends a trailing newline that org-mode renders as a blank line before =####+END:=.
+  The Python handler matches this to keep =.pydb= and =.eldb= diffs clean.
 
 - *=README.org= is the authoritative source* — =py3/README.rst= is generated
   from it by =pypiProc.sh=; never hand-edit the RST.

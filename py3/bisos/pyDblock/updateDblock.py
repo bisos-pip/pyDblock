@@ -40,7 +40,7 @@ def registerHandler(
 
 # Matches the full dblock: BEGIN line (kept), body (replaced), END marker (kept).
 _DBLOCK_RE = re.compile(
-    r'(###\+BEGIN:[ \t]+(\S+)([ \t][^\n]*)?\n)(.*?)(###\+END:)',
+    r'(#{4}\+BEGIN:[ \t]+(\S+)([ \t][^\n]*)?\n)(.*?)(#{4}\+END:)',
     re.DOTALL,
 )
 
@@ -53,9 +53,10 @@ def _parseArgs(argsStr: typing.Optional[str]) -> typing.Dict[str, str]:
         return {}
     result: typing.Dict[str, str] = {}
     for key, val in _ARG_RE.findall(argsStr):
-        # Strip surrounding quotes if present
+        # Strip surrounding quotes if present, then decode org-mode backslash escapes
         if val.startswith('"') and val.endswith('"'):
             val = val[1:-1]
+            val = val.replace('\\\\', '\\')
         result[key] = val
     return result
 

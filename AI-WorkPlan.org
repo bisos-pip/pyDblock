@@ -57,24 +57,54 @@ Goal: Reinstall editable, verify the dblock engine, then upload to PyPI.
 
 * Stage 2 TODOs
 ** +
-** DONE [#A] Reinstall editable and re-point the py-dblock.cs symlink at this repo
+** DONE [#A] Reinstall editable and re-point the py-dblock.cs symlink at this repo :aiAndMe:
 CLOSED: [2026-07-19 Sun 19:01] SCHEDULED: <2026-07-12 Sat>
 The installed =py-dblock.cs= still points at the old =startAiActivity= repo dir.
 Run (from =py3/=):
 : pypiProc.sh -v -n showRun -i pkgReInstall edit /bisos/venv/py3/dev-bisos3
 ----- AI Results: ------
-
+Interatively confirmed by Mohsen
 ** DONE [#A] Verify updateDblocks on the example fixture :ai:
 CLOSED: [2026-07-19 Sun 19:01] SCHEDULED: <2026-07-12 Sat>
 Run =py-dblock.cs -i examples= and =py-dblock.cs -i updateDblocks ./tests/dblock_AI-WorkPlan.org=,
 and confirm the =b:ai:file/particulars= block is expanded correctly.
 Confirm that ./py3/tests/verify.sh has a test for that.
 ----- AI Results: ------
-
+    Interactively confirmed by Mohsen
 ** DONE [#A] Verify python bx:dblock:global:run-result-stdout :ai:
 CLOSED: [2026-07-19 Sun 19:01] SCHEDULED: <2026-07-12 Sat>
 Confirm that ./py3/tests/verify.sh has a test for that.
 ----- AI Results: ------
+    Interactively confirmed by Mohsen
+** DONE [#A] In dblock implementation of each dblock processor, include docstring comments that point to elisp eimplementation
+CLOSED: [2026-07-20 Sun]
+    SCHEDULED: <2026-07-20 Mon 20:28>
+    The elisp implementations are all in /bisos/blee/env3/dblocks/ . Greping for dblock names will locate the elisp functions.
+    ----- AI Results: ------
+    Added elisp cross-reference docstrings to both handlers:
+    - =dblock_runResult.py=: points to =org-dblock-write:bx:dblock:global:run-result-stdout=
+      in =dblock-global-run-results.el=. Notes stderr suppression difference.
+    - =dblock_particulars.py=: points to =org-dblock-write:b:ai:file/particulars=
+      in =dblock-comeega-prog.el=. Notes pathlib vs elisp f-* function equivalence.
+
+** DONE [#A] Enhance ./py3/tests with conventions for unexpanded, bx-dblock expanded and pyDblock expanded :aiAndMe:
+CLOSED: [2026-07-20 Sun]
+SCHEDULED: <2026-07-20 Mon 20:28>
+Then compare bx-dblock expansions against pyDblock. Use these naming conventions: file.blank, file.eldb file.pydb
+I have set up basic files and starting point bash functions in verify.sh
+Running verify.sh points the following bugs:
+  - The ####End is being stripped of one '#'
+      - Current dir is relative . instead of curDir
+      - There is a an extra back slash from the echo
+----- AI Results: ------
+Fixed all three bugs in =updateDblock.py= and =dblock_runResult.py=:
+1. =####+END:= stripping: regex changed from =###\#+= to =#{4}\+= to match exactly
+   4 hashes, preventing 3-hash org-internal markers from being matched or mangled.
+2. Relative working directory: added =targetDir.resolve()= in =dblock_particulars._handler=.
+3. Extra backslash: =_parseArgs= now applies =val.replace('\\\\\\\\', '\\\\')= after
+   quote-stripping, mirroring org-mode's unescaping of =\\\\= → =\\= before shell dispatch.
+   Also added trailing blank line to =dblock_runResult= output to match elisp behaviour.
+verify.sh now shows only expected diffs (timestamp and filename).
 
 
 ** TODO [#A] After upload to pypi, test it as a pipx install

@@ -5,10 +5,7 @@
 #+TAGS: me ai aiAndMe
 
 ####+BEGIN: b:ai:file/particulars
-* AI Working Context
-  Working Directory: ../tests
-  File: /bisos/git/auth/bxRepos/bisos-pip/pyDblock/py3/tests/AI-WorkPlan.org
-###+END:
+####+END:
 
 This Work Plan file drives the AI collaborative development.
 Interactions are broken down into "Stages". Each Stage has a set
