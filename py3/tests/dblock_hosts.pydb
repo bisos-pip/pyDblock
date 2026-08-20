@@ -8,24 +8,24 @@ ff02::2 ip6-allrouters
 
 
 ####+BEGIN: bx:dblock:global:run-result-stdout :command "echo \\# $(date)"
-# Mon Jul 20 21:49:53 PDT 2026
+# Tue Jul 21 07:43:26 PM PDT 2026
 
 ####+END:
 
 
 ####+BEGIN: bx:dblock:global:run-result-stdout :command "bannaInfo.cs -i bannaForEtcHosts"
-127.0.22.100  airflow.here
-127.0.22.101  csLineInvoker.here
-127.0.22.102  csLineInvoker_dev.here
-127.0.22.103  csPlayerPerf.here
-127.0.22.104  csPlayerPerf_dev.here
-127.0.22.105  csPlayerUi.here
-127.0.22.106  csPlayerUi_dev.here
-127.0.22.107  sonCliLineInvoker.here
-127.0.22.108  sonCliLineInvoker_dev.here
-127.0.22.109  sonCliPlayerUi.here
-127.0.22.110  sonCliPlayerUi_dev.here
-127.0.22.111  starterSidebar.here
-127.0.22.112  starterSidebar_dev.here
+127.0.22.100  airflow.here  # port=24006
+127.0.22.101  csLineInvoker.here  # port=24002
+127.0.22.102  csLineInvoker_dev.here  # port=25002
+127.0.22.103  csPlayerPerf.here  # port=23001
+127.0.22.104  csPlayerPerf_dev.here  # port=23501
+127.0.22.105  csPlayerUi.here  # port=24001
+127.0.22.106  csPlayerUi_dev.here  # port=25001
+127.0.22.107  sonCliLineInvoker.here  # port=24004
+127.0.22.108  sonCliLineInvoker_dev.here  # port=25004
+127.0.22.109  sonCliPlayerUi.here  # port=24003
+127.0.22.110  sonCliPlayerUi_dev.here  # port=25003
+127.0.22.111  starterSidebar.here  # port=24005
+127.0.22.112  starterSidebar_dev.here  # port=25005
 
 ####+END:
