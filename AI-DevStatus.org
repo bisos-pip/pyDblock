@@ -26,6 +26,9 @@ Note to a fresh Claude: this file is intentionally sparse at project start.
 Fill in the sections below when asked to update, following the structure provided.
 
 * Current State
+- 2026-11-26 (from a bisos-pip/b session): every =<name>.here= in this repo is now =<name>.internal=
+  (=.here= is an https-only gTLD in Chrome; bisos-pip/banna AI-WorkPlan.org Stage 4, banna's
+  =tcpPorts.hereFqdn=). Text renamed, not tested here; AI-WorkPlan.org keeps =.here= as history.
 
   Stage 1 (carve-out from startAiActivity) is fully DONE. Stage 2 is nearly
   complete. Only one TODO remains: PyPI upload and =pipx install= end-to-end test.

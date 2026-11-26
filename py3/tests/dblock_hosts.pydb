@@ -14,18 +14,18 @@ ff02::2 ip6-allrouters
 
 
 ####+BEGIN: bx:dblock:global:run-result-stdout :command "bannaInfo.cs -i bannaForEtcHosts"
-127.0.22.100  airflow.here  # port=24006
-127.0.22.101  csLineInvoker.here  # port=24002
-127.0.22.102  csLineInvoker_dev.here  # port=25002
-127.0.22.103  csPlayerPerf.here  # port=23001
-127.0.22.104  csPlayerPerf_dev.here  # port=23501
-127.0.22.105  csPlayerUi.here  # port=24001
-127.0.22.106  csPlayerUi_dev.here  # port=25001
-127.0.22.107  sonCliLineInvoker.here  # port=24004
-127.0.22.108  sonCliLineInvoker_dev.here  # port=25004
-127.0.22.109  sonCliPlayerUi.here  # port=24003
-127.0.22.110  sonCliPlayerUi_dev.here  # port=25003
-127.0.22.111  starterSidebar.here  # port=24005
-127.0.22.112  starterSidebar_dev.here  # port=25005
+127.0.22.100  airflow.internal  # port=24006
+127.0.22.101  csLineInvoker.internal  # port=24002
+127.0.22.102  csLineInvoker-dev.internal  # port=25002
+127.0.22.103  csPlayerPerf.internal  # port=23001
+127.0.22.104  csPlayerPerf-dev.internal  # port=23501
+127.0.22.105  csPlayerUi.internal  # port=24001
+127.0.22.106  csPlayerUi-dev.internal  # port=25001
+127.0.22.107  sonCliLineInvoker.internal  # port=24004
+127.0.22.108  sonCliLineInvoker-dev.internal  # port=25004
+127.0.22.109  sonCliPlayerUi.internal  # port=24003
+127.0.22.110  sonCliPlayerUi-dev.internal  # port=25003
+127.0.22.111  starterSidebar.internal  # port=24005
+127.0.22.112  starterSidebar-dev.internal  # port=25005
 
 ####+END:
